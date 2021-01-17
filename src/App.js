@@ -28,7 +28,7 @@ function App() {
   return (
     <div>
       <Nav isLibraryOpen={isLibraryOpen} setIsLibraryOpen={setIsLibraryOpen} />
-      <Song currentSong={currentSong} />
+      <Song currentSong={currentSong} isPlaying={isPlaying} />
       <Player
         setSongInfo={setSongInfo}
         songInfo={songInfo}
