@@ -18,6 +18,27 @@ function App() {
   });
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
+  const songEndHandler = () => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    const lastIndex = songs.length - 1;
+
+    songSelectHandler(songs[currentIndex === lastIndex ? 0 : currentIndex + 1]);
+  };
+
+  const songSelectHandler = async (songToBePlayed) => {
+    const updatedSongs = songs.map((songInState) => {
+      return songToBePlayed.id === songInState.id
+        ? { ...songInState, active: true }
+        : { ...songInState, active: false };
+    });
+    await setCurrentSong({ ...songToBePlayed, active: true });
+    setSongs(updatedSongs);
+    if (isPlaying) {
+      await audioRef.current.play();
+      audioRef.current.play();
+    }
+  };
+
   const timeUpdateHandler = (event) => {
     const { currentTime, duration } = event.target;
     if (currentTime && duration) {
@@ -35,19 +56,19 @@ function App() {
         audioRef={audioRef}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
+        songSelectHandler={songSelectHandler}
+        songs={songs}
         currentSong={currentSong}
       />
       <Library
         isLibraryOpen={isLibraryOpen}
-        isPlaying={isPlaying}
-        setSongs={setSongs}
-        audioRef={audioRef}
         songs={songs}
-        setCurrentSong={setCurrentSong}
+        songSelectHandler={songSelectHandler}
       />
       <audio
         onTimeUpdate={timeUpdateHandler}
         onLoadedMetadata={timeUpdateHandler}
+        onEnded={songEndHandler}
         ref={audioRef}
         src={currentSong.audio}
       ></audio>

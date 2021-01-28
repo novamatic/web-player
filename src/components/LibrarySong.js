@@ -1,30 +1,9 @@
 import React from 'react';
 
-const LibrarySong = ({
-  song,
-  setCurrentSong,
-  audioRef,
-  setSongs,
-  songs,
-  isPlaying,
-}) => {
-  const songSelectHandler = async () => {
-    const updatedSongs = songs.map((songInState) => {
-      return song.id === songInState.id
-        ? { ...songInState, active: true }
-        : { ...songInState, active: false };
-    });
-    setCurrentSong({ ...song, active: true });
-    setSongs(updatedSongs);
-    if (isPlaying) {
-      await audioRef.current.play();
-      audioRef.current.play();
-    }
-  };
-
+const LibrarySong = ({ song, songSelectHandler }) => {
   return (
     <div
-      onClick={songSelectHandler}
+      onClick={() => songSelectHandler(song)}
       className={`library-song ${song.active ? 'selected' : ''}`}
     >
       <img src={song.cover} alt="Track cover" />
